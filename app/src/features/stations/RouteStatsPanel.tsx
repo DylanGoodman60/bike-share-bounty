@@ -1,6 +1,6 @@
 import { ArrowRight, X } from 'lucide-react';
 import type { RouteTripStats } from './useRouteTripStats';
-import './RouteStatsPanel.css';
+import { floatingPanelClass, panelLabelClass } from './panelStyles';
 
 type RouteStatsPanelProps = {
   startStationName: string;
@@ -45,11 +45,11 @@ export function RouteStatsPanel({
   onClose,
 }: RouteStatsPanelProps) {
   return (
-    <aside className="route-stats-panel" aria-labelledby="route-stats-title">
-      <div className="route-stats-panel__header">
-        <p className="route-stats-panel__eyebrow">Route statistics</p>
+    <aside className={floatingPanelClass} aria-labelledby="route-stats-title">
+      <div className="flex items-center justify-between gap-2">
+        <p className={panelLabelClass}>Route statistics</p>
         <button
-          className="route-stats-panel__close"
+          className="grid size-7.5 shrink-0 cursor-pointer place-items-center rounded-full text-muted hover:bg-shell focus-visible:bg-shell"
           type="button"
           aria-label="Close route statistics"
           onClick={onClose}
@@ -58,51 +58,51 @@ export function RouteStatsPanel({
         </button>
       </div>
 
-      <h2 id="route-stats-title" className="route-stats-panel__route">
+      <h2 id="route-stats-title" className="mt-1 mb-3 flex flex-wrap items-center gap-1.5 text-[15px] leading-snug font-bold wrap-anywhere">
         <span>{startStationName}</span>
         <ArrowRight size={16} aria-hidden="true" />
         <span>{endStationName}</span>
       </h2>
 
-      {isLoading && <p className="route-stats-panel__message">Loading trip data...</p>}
-      {errorMessage && <p className="route-stats-panel__error">{errorMessage}</p>}
+      {isLoading && <p className="my-3 text-sm">Loading trip data...</p>}
+      {errorMessage && <p className="my-3 text-sm text-danger">{errorMessage}</p>}
       {!isLoading && !errorMessage && stats?.completed_trip_count === 0 && (
-        <p className="route-stats-panel__message">No completed trips found for this route.</p>
+        <p className="my-3 text-sm">No completed trips found for this route.</p>
       )}
       {!isLoading && !errorMessage && stats && stats.completed_trip_count > 0 && (
         <>
-          <h3 className="route-stats-panel__section-title">Fastest trips</h3>
-          <ol className="route-stats-panel__fastest">
+          <h3 className={`${panelLabelClass} mb-1.5`}>Fastest trips</h3>
+          <ol className="mb-3 list-decimal pl-5 marker:text-[13px] marker:font-bold marker:text-quiet">
             {stats.fastest_trips.map((trip) => (
-              <li key={trip.trip_id}>
-                <span className="route-stats-panel__fastest-duration">
+              <li key={trip.trip_id} className="py-1">
+                <span className="block text-[15px] font-bold">
                   {formatDuration(trip.duration_seconds)}
                 </span>
-                <span className="route-stats-panel__fastest-detail">
+                <span className="block text-xs text-muted">
                   {formatSpeed(trip.straight_line_speed_kmh)} · {formatTripDate(trip.start_time)}
                 </span>
               </li>
             ))}
           </ol>
 
-          <dl className="route-stats-panel__metrics">
+          <dl className="text-[13px] *:flex *:justify-between *:gap-3 *:border-t *:border-line *:py-2">
             <div>
-              <dt>Completed trips</dt>
-              <dd>{stats.completed_trip_count.toLocaleString()}</dd>
+              <dt className="text-muted">Completed trips</dt>
+              <dd className="text-right font-bold">{stats.completed_trip_count.toLocaleString()}</dd>
             </div>
             <div>
-              <dt>Average trip time</dt>
-              <dd>{formatDuration(stats.average_duration_seconds)}</dd>
+              <dt className="text-muted">Average trip time</dt>
+              <dd className="text-right font-bold">{formatDuration(stats.average_duration_seconds)}</dd>
             </div>
             <div>
-              <dt>Estimated average speed</dt>
-              <dd>{formatSpeed(stats.average_straight_line_speed_kmh)}</dd>
+              <dt className="text-muted">Estimated average speed</dt>
+              <dd className="text-right font-bold">{formatSpeed(stats.average_straight_line_speed_kmh)}</dd>
             </div>
           </dl>
         </>
       )}
 
-      <p className="route-stats-panel__note">
+      <p className="mt-3 text-xs leading-normal text-quiet">
         Speed uses straight-line distance between stations, not actual route distance.
       </p>
     </aside>

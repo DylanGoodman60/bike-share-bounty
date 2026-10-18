@@ -91,7 +91,7 @@ export function StationMap() {
 
   return (
     <>
-      <div className="station-selection-stack">
+      <div className="absolute top-4 left-4 z-3000 flex max-h-[calc(100%-32px)] w-[min(320px,calc(100%-32px))] flex-col gap-2 overflow-y-auto">
         <StationSelectionPanel
           startStation={startStation}
           endStation={selectedRoute?.end ?? null}

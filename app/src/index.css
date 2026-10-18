@@ -1,6 +1,51 @@
 @import "tailwindcss";
 
-html, body, #root {
-  height: 100%;
-  margin: 0;
+@theme {
+  --font-sans: "Avenir Next", "Segoe UI", sans-serif;
+  --font-display: "Bungee", "Avenir Next", sans-serif;
+
+  /* App surfaces */
+  --color-shell: #e9efeb;
+  --color-surface: #f8faf8;
+  --color-ink: #21342e;
+  --color-muted: #53665d;
+  --color-quiet: #71817a;
+  --color-edge: #cbd6d0;
+  --color-line: #dce5e0;
+
+  /* Brand */
+  --color-brand: #167d5a;
+  --color-brand-dark: #214c3f;
+  --color-danger: #a33628;
+
+  /* Casino topbar */
+  --color-felt: #1b5c45;
+  --color-felt-light: #2a7a5c;
+  --color-gold: #f5c542;
+  --color-gold-light: #ffe58a;
+  --color-gold-deep: #c8901a;
+  --color-chip: #e5484d;
+}
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    @apply bg-shell font-sans text-ink antialiased;
+  }
+}
+
+/* maplibre wraps each marker in an element we don't render, so lift it from the outside
+   to keep the hovered/selected station (and its tooltip) above its neighbours. */
+.maplibregl-marker:has([data-bike-marker]:hover),
+.maplibregl-marker:has([data-bike-marker]:focus-within) {
+  z-index: 1000 !important;
+}
+
+.maplibregl-marker:has([data-bike-marker][data-selected]) {
+  z-index: 2000 !important;
 }
